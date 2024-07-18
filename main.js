@@ -19,21 +19,20 @@ function resetBoard(board) {
     board.fill(undefined);
 }
 
-async function gameLoop(board) {
-    const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-    let turn = 0;
-    while (!isBoardFilled(board) && !checkWin(board, "X") && !checkWin(board, "O")) {
-        if (turn == 0) {
-            // Player's turn - Wait for the player to click a cell
-        } else {
-            const aiMove = getBestMove(board, "O");
-            putO(board, aiMove);
-            updateBoardUI();
-        }
-        turn = 1 - turn; // Switch turns
-    }
-    checkGameResult(board);
-}
+// async function gameLoop(board) {
+//     let turn = 0;
+//     while (!isBoardFilled(board) && !checkWin(board, "X") && !checkWin(board, "O")) {
+//         if (turn == 0) {
+//             // Player's turn - Wait for the player to click a cell
+//         } else {
+//             const aiMove = getBestMove(board, "O");
+//             putO(board, aiMove);
+//             updateBoardUI();
+//         }
+//         turn = 1 - turn; // Switch turns
+//     }
+//     checkGameResult(board);
+// }
 
 function getBestMove(board, char) {
     // Check for winning move
@@ -102,12 +101,16 @@ function updateBoardUI() {
 
 function checkGameResult(board) {
     const gameOverMessage = document.getElementById('gameOverMessage');
+    const restartButton = document.getElementById('restartGame');
     if (checkWin(board, "X")) {
         gameOverMessage.textContent = "Player wins!";
+        restartButton.style.display = "block";
     } else if (checkWin(board, "O")) {
         gameOverMessage.textContent = "AI wins!";
+        restartButton.style.display = "block";
     } else if (isBoardFilled(board)) {
         gameOverMessage.textContent = "It's a draw!";
+        restartButton.style.display = "block";
     }
 }
 
@@ -115,6 +118,7 @@ function resetGame() {
     resetBoard(gameboard.board);
     updateBoardUI();
     document.getElementById('gameOverMessage').textContent = "";
+    document.getElementById('restartGame').style.display = "none";
 }
 
 resetBoard(gameboard.board);
@@ -125,7 +129,6 @@ document.getElementById('startGame').addEventListener('click', () => {
         gameboard.player = player(playerName);
         document.getElementById('playerDisplay').textContent = `Player: ${playerName}`;
         resetGame();
-        gameLoop(gameboard.board);
     } else {
         alert('Please enter your name.');
     }
@@ -133,7 +136,6 @@ document.getElementById('startGame').addEventListener('click', () => {
 
 document.getElementById('restartGame').addEventListener('click', () => {
     resetGame();
-    gameLoop(gameboard.board);
 });
 
 document.querySelectorAll('.cell').forEach(cell => {
@@ -153,6 +155,7 @@ document.querySelectorAll('.cell').forEach(cell => {
         }
     });
 });
+
 
 
 // const openaiApiKey = 'OPENAI_API_KEY';
